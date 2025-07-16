@@ -34,12 +34,13 @@ OSS2LIB = {
     'libxml2': 'libxml2',
     'zlib': 'libz',
     'openssl': 'libcrypto',
+    'matter': 'matter',
 }
 
 SAVE_DIR = Path('saved/libvdiff_idf_all_res')
 SAVE_DIR.mkdir(exist_ok=True, parents=True)
 
-ALL_OPT = ['O0', 'O1', 'O2', 'O3']
+ALL_OPT = ['Os', 'O2']
 ALL_ARCH = ['ARM', 'X86', 'PPC', 'X64']
 
 
