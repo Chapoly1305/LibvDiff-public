@@ -29,6 +29,7 @@ OSS2LIB = {
     'c-blosc': 'libblosc',
     'expat': 'libexpat',
     'freetype': 'libfreetype',
+    'matter': 'matter',
     'mbedtls': 'libmbedcrypto',
     'libpng': 'libpng',
     'libxml2': 'libxml2',
@@ -46,8 +47,17 @@ ALL_ARCH = ['ARM', 'X86', 'PPC', 'X64']
 def prepare_cross_optim_features(oss, lib, arch, versions=None):
     option2ver2bin_feats = defaultdict(dict)
 
-    for opt in ALL_OPT:
+    # Get actual optimization levels for this project
+    arch_path = DATASET_PATH.joinpath(f'{oss}/{lib}/{arch}/')
+    if arch_path.exists():
+        available_opts = [d.name for d in arch_path.iterdir() if d.is_dir() and not d.name.startswith('.')]
+    else:
+        available_opts = ALL_OPT
+
+    for opt in available_opts:
         prj_path = DATASET_PATH.joinpath(f'{oss}/{lib}/{arch}/{opt}/')
+        if not prj_path.exists():
+            continue
         for version_path in prj_path.iterdir():
             if version_path.name.startswith('.'):
                 continue
@@ -107,9 +117,17 @@ def prepare_features_and_options(versions, oss, lib, exp):
     if exp == "cross_optim":
         arch = "ARM"
         option2ver2bin_feats = prepare_cross_optim_features(oss=oss, lib=lib, arch=arch, versions=versions)
+        
+        # Get actual available optimization levels for this project
+        arch_path = DATASET_PATH.joinpath(f'{oss}/{lib}/{arch}/')
+        if arch_path.exists():
+            available_opts = [d.name for d in arch_path.iterdir() if d.is_dir() and not d.name.startswith('.')]
+        else:
+            available_opts = ALL_OPT
+            
         all_options = []
-        for base_opt in ALL_OPT:
-            for pred_opt in ALL_OPT:
+        for base_opt in available_opts:
+            for pred_opt in available_opts:
                 if base_opt == pred_opt:
                     continue
                 all_options.append((f"{arch}-{base_opt}", f"{arch}-{pred_opt}"))

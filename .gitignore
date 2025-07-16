@@ -2,3 +2,7 @@ data_process/dataset
 data_process/features
 **/__pycache__
 
+.idapro/
+ida-classroom-free-9.1/
+saved/
+data_process/
