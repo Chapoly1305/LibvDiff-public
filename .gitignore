@@ -1,0 +1,6 @@
+ida-classroom-free-9.1/
+data_process/dataset
+data_process/features
+data_process/log
+**/__pycache__
+.idapro
